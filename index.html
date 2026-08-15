@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TEY SHOP - Premium Fashion & Lifestyle</title>
+    <style>
+        :root {
+            --bg-body: #f7f8fa;
+            --bg-sidebar: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --card-bg: #ffffff;
+            --border-color: #edf2f7;
+            --topbar-bg: #ffffff;
+            --accent: #667eea;
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bottom-nav-height: 60px;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #1a202c;
+            --bg-sidebar: #2d3748;
+            --text-main: #f7fafc;
+            --text-muted: #a0aec0;
+            --card-bg: #2d3748;
+            --border-color: #4a5568;
+            --topbar-bg: #2d3748;
+            --accent: #9f7aea;
+            --accent-gradient: linear-gradient(135deg, #9f7aea 0%, #667eea 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, 'Kantumruy Pro', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh; transition: background 0.3s, color 0.3s; padding-bottom: 0; }
+       
+        /* Sidebar Menu Styles */
+        aside { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 1000; transition: transform 0.3s ease, background 0.3s; box-shadow: 4px 0 15px rgba(0,0,0,0.05); }
+        .sidebar-brand { padding: 25px 20px; font-size: 20px; font-weight: 800; border-bottom: 1px solid var(--border-color); cursor: pointer; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .menu-list { list-style: none; padding: 15px 0; flex-grow: 1; overflow-y: auto; }
+        .menu-list li { padding: 12px 20px; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: all 0.25s ease; margin: 4px 12px; border-radius: 8px; }
+        .menu-list li:hover, .menu-list li.active { background: rgba(102, 126, 234, 0.1); color: var(--accent); font-weight: 700; }
+        .sidebar-footer { padding: 15px 20px; border-top: 1px solid var(--border-color); font-size: 12px; color: var(--text-muted); text-align: center; }
+
+        /* Main Content Wrapper */
+        main { margin-left: 260px; flex-grow: 1; padding: 30px; transition: margin-left 0.3s ease; width: calc(100% - 260px); }
+        .page { display: none; }
+        .active-page { display: block; animation: fadeIn 0.3s ease-in-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Top Bar Header */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: var(--topbar-bg); padding: 12px 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); transition: background 0.3s; gap: 10px; }
+        .hamburger-btn { background: var(--bg-body); border: 1px solid var(--border-color); font-size: 14px; padding: 8px 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; color: var(--text-main); font-weight: 600; }
+        .top-bar-right { display: flex; gap: 8px; align-items: center; margin-left: auto; flex-wrap: wrap; }
+        .top-bar a, .top-bar button, .top-bar select { text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 13px; cursor: pointer; padding: 8px 12px; border: 1px solid var(--border-color); background: var(--card-bg); border-radius: 8px; transition: 0.2s; outline: none; }
+       
+        /* Theme Toggle Button */
+        .theme-toggle-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+
+        /* General UI Elements */
+        .hero { background: var(--accent-gradient); color: #fff; text-align: center; padding: 45px 20px; margin-bottom: 25px; border-radius: 16px; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2); }
+        .hero h1 { font-size: 28px; margin-bottom: 10px; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 14px; opacity: 0.9; margin-bottom: 20px; font-weight: 400; }
+        .section-title { font-size: 20px; margin: 25px 0 15px 0; font-weight: 700; color: var(--text-main); position: relative; display: inline-block; }
+        .section-title::after { content: ''; position: absolute; left: 0; bottom: -4px; width: 35px; height: 3px; background: var(--accent); border-radius: 2px; }
+
+        .btn { background: var(--accent-gradient); color: #fff; padding: 10px 20px; border: none; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; transition: all 0.2s ease; text-align: center; border-radius: 8px; font-weight: 600; box-shadow: 0 4px 10px rgba(102, 126, 234, 0.25); }
+        .btn:active { transform: scale(0.98); }
+        .btn-secondary { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); box-shadow: none; }
+        .btn-buy { background: #ff5e62; color: #fff; box-shadow: 0 4px 10px rgba(255, 94, 98, 0.25); }
+        .btn-danger { background: #ff5e62; color: #fff; border: none; padding: 6px 12px; cursor: pointer; border-radius: 6px; font-weight: 600; font-size: 12px; }
+        .btn-warning { background: #ecc94b; color: #744210; border: none; padding: 6px 12px; cursor: pointer; border-radius: 6px; font-weight: 600; font-size: 12px; }
+        .btn-success { background: #48bb78; color: #fff; border: none; padding: 6px 12px; cursor: pointer; border-radius: 6px; font-weight: 600; font-size: 12px; }
+        .btn-info { background: #4299e1; color: #fff; border: none; padding: 6px 12px; cursor: pointer; border-radius: 6px; font-weight: 600; font-size: 12px; }
+
+        /* Controls Bar (Search & Sort) */
+        .controls-bar { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-input, .sort-select { padding: 10px 14px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); border-radius: 8px; font-size: 13px; outline: none; width: 100%; }
+        .search-input { flex-grow: 1; max-width: 100%; }
+
+        /* Category Bar */
+        .category-bar { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
+        .category-bar::-webkit-scrollbar { display: none; }
+        .cat-btn { background: var(--card-bg); border: 1px solid var(--border-color); padding: 8px 16px; cursor: pointer; font-weight: 600; font-size: 13px; border-radius: 20px; color: var(--text-muted); transition: all 0.2s; whitespace: nowrap; flex-shrink: 0; }
+        .cat-btn.active, .cat-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+        /* Product Grid & Cards */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .product-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .product-image { width: 100%; height: 180px; background: var(--bg-body); display: flex; align-items: center; justify-content: center; color: var(--text-muted); margin-bottom: 12px; overflow: hidden; border-radius: 8px; cursor: pointer; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; }
+        .product-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; cursor: pointer; color: var(--text-main); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; height: 38px; line-height: 1.3; }
+        .product-price { color: #ff5e62; font-weight: 800; margin-bottom: 12px; font-size: 15px; }
+        .product-card-actions { display: flex; flex-direction: column; gap: 6px; }
+        .product-card-actions .btn { width: 100%; padding: 8px 10px; font-size: 12px; }
+
+        /* Forms & Responsive Tables Wrapper */
+        .form-container { max-width: 600px; margin: 10px auto; background: var(--card-bg); padding: 25px 20px; border: 1px solid var(--border-color); border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 12px; color: var(--text-muted); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); font-size: 13px; border-radius: 8px; background: var(--card-bg); color: var(--text-main); outline: none; }
+
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .admin-table { width: 100%; border-collapse: collapse; background: var(--card-bg); min-width: 500px; }
+        .admin-table th, .admin-table td { border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); padding: 10px 12px; text-align: left; font-size: 12px; color: var(--text-main); }
+        .admin-table th { background: var(--bg-body); font-weight: 700; text-transform: uppercase; font-size: 11px; white-space: nowrap; }
+
+        /* Status Badges */
+        .badge { padding: 4px 10px; font-size: 10px; font-weight: 700; border-radius: 15px; display: inline-block; white-space: nowrap; }
+        .badge-unpaid { background: #fff5f5; color: #e53e3e; }
+        .badge-paid { background: #f0fff4; color: #38a169; }
+        .badge-info { background: #ebf8ff; color: #3182ce; }
+        .badge-blocked { background: #fff5f5; color: #e53e3e; }
+
+        /* Customer Service Box */
+        .cs-card { background: var(--bg-body); border: 1px solid var(--border-color); padding: 15px; border-radius: 10px; margin-top: 15px; }
+        .cs-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; word-break: break-word; }
+
+        /* Image Previews */
+        .image-preview-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .preview-box { width: 55px; height: 55px; border: 1px dashed var(--border-color); border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--bg-body); font-size: 9px; color: var(--text-muted); }
+        .preview-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Detail View Styles */
+        .detail-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; background: var(--card-bg); padding: 25px; border: 1px solid var(--border-color); border-radius: 14px; }
+        .detail-gallery { display: flex; flex-direction: column; gap: 10px; }
+        .detail-main-img { width: 100%; height: 320px; background: var(--bg-body); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border-color); border-radius: 10px; }
+        .detail-main-img img { width: 100%; height: 100%; object-fit: cover; }
+        .detail-thumbs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+        .thumb-preview { width: 60px; height: 60px; background: var(--bg-body); cursor: pointer; border: 2px solid transparent; flex-shrink: 0; overflow: hidden; border-radius: 6px; }
+        .thumb-preview.active-thumb { border-color: var(--accent); }
+        .thumb-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+        .options-group { margin: 15px 0; }
+        .options-group label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 12px; color: var(--text-muted); }
+        .chip-container { display: flex; gap: 8px; flex-wrap: wrap; }
+        .chip { border: 1px solid var(--border-color); padding: 6px 14px; cursor: pointer; font-size: 12px; border-radius: 6px; font-weight: 600; color: var(--text-main); }
+        .chip.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+        /* Review Section */
+        .review-section { margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .review-item { background: var(--bg-body); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 12px; }
+
+        /* Mobile Bottom Nav Bar */
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; height: var(--bottom-nav-height); background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 999; justify-content: space-around; align-items: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 10px; color: var(--text-muted); text-decoration: none; font-weight: 600; flex: 1; height: 100%; cursor: pointer; }
+        .bottom-nav-item.active { color: var(--accent); }
+        .bottom-nav-item span.icon { font-size: 18px; }
+
+        /* Toast Popup */
+        #toast { position: fixed; bottom: 20px; right: 20px; background: #1a202c; color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 9999; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; max-width: 90%; text-align: center; }
+        #toast.show { opacity: 1; }
+
+        /* Admin Layout */
+        .admin-layout { display: flex; min-height: 70vh; border: 1px solid var(--border-color); background: var(--card-bg); border-radius: 12px; overflow: hidden; flex-direction: column; }
+        .admin-sidebar { width: 100%; background: #1a202c; color: #fff; display: flex; flex-direction: column; }
+        .admin-sidebar-header { padding: 15px; font-weight: 700; border-bottom: 1px solid #2d3748; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        .admin-menu-list { list-style: none; padding: 5px 0; display: flex; overflow-x: auto; background: #1a202c; }
+        .admin-menu-list li { padding: 10px 14px; cursor: pointer; font-size: 12px; color: #a0aec0; transition: 0.2s; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+        .admin-menu-list li:hover, .admin-menu-list li.active-admin-tab { background: #2d3748; color: #fff; font-weight: 700; border-bottom: 2px solid var(--accent); }
+        .admin-content-area { flex-grow: 1; padding: 20px 15px; overflow-y: auto; background: var(--card-bg); }
+        .admin-sub-page { display: none; }
+        .active-admin-sub-page { display: block; }
+       
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: var(--bg-body); padding: 15px; border: 1px solid var(--border-color); border-radius: 10px; text-align: center; }
+        .stat-card h4 { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        .stat-card p { font-size: 20px; font-weight: 800; color: var(--text-main); }
+
+        /* Desktop Media Query adjustments */
+        @media(min-width: 901px) {
+            .admin-layout { flex-direction: row; }
+            .admin-sidebar { width: 220px; }
+            .admin-menu-list { flex-direction: column; overflow-x: visible; }
+            .admin-menu-list li.active-admin-tab { border-bottom: none; border-left: 3px solid var(--accent); }
+            .search-input { width: auto; }
+        }
+
+        /* Mobile Media Query Rules */
+        @media(max-width: 900px) {
+            aside { transform: translateX(-260px); }
+            aside.mobile-open { transform: translateX(0); }
+            main { margin-left: 0; width: 100%; padding: 15px 15px calc(var(--bottom-nav-height) + 20px) 15px; }
+            .detail-container { grid-template-columns: 1fr; gap: 20px; padding: 15px; }
+            .detail-main-img { height: 260px; }
+            .hero { padding: 30px 15px; }
+            .hero h1 { font-size: 22px; }
+            .hero p { font-size: 13px; }
+            .bottom-nav { display: flex; }
+            #toast { bottom: calc(var(--bottom-nav-height) + 15px); }
+            
+            /* 2 Columns on Smartphones */
+            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .product-card { padding: 10px; }
+            .product-image { height: 130px; }
+            .product-name { font-size: 12px; height: 32px; margin-bottom: 4px; }
+            .product-price { font-size: 13px; margin-bottom: 8px; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast">Notification message</div>
+
+    <!-- SIDEBAR NAVIGATION MENU -->
+    <aside id="sidebar">
+        <div class="sidebar-brand">
+            <span onclick="switchPage('home')" style="cursor:pointer;">TEY SHOP</span>
+            <span style="cursor:pointer; font-size:18px; color:var(--text-muted);" onclick="toggleSidebar()">✕</span>
+        </div>
+        <ul class="menu-list">
+            <li id="menu-home" class="active" onclick="switchPage('home')"><span data-i18n="menuHome">🏠 Home</span></li>
+            <li id="menu-shop" onclick="switchPage('shop')"><span data-i18n="menuShop">👕 Shop</span></li>
+            <li id="menu-cart" onclick="switchPage('cart')"><span data-i18n="menuCart">🛒 Cart</span> (<span id="cartCount">0</span>)</li>
+            <li id="menu-favorites" onclick="switchPage('favorites')"><span data-i18n="menuFavorites">❤️ Favorites</span> (<span id="favCount">0</span>)</li>
+            <li id="menu-orders" onclick="switchPage('orders')"><span data-i18n="menuOrders">📦 My Orders</span></li>
+            <li id="menu-profile" onclick="switchPage('profile')"><span data-i18n="menuProfile">👤 Profile</span></li>
+            <li id="menu-settings" onclick="switchPage('settings')"><span data-i18n="menuSettings">⚙ Settings</span></li>
+            <li id="menu-admin" onclick="switchPage('admin')"><span data-i18n="menuAdmin">🔒 Admin Panel</span></li>
+        </ul>
+        <div class="sidebar-footer">
+            &copy; 2026 TEY SHOP. All rights reserved.
+        </div>
+    </aside>
+
+    <!-- MAIN APP CONTAINER -->
+    <main>
+        <div class="top-bar">
+            <button class="hamburger-btn" onclick="toggleSidebar()" title="Toggle Menu">☰ Menu</button>
+            <div class="top-bar-right" id="topAuthNav">
+                <select id="topLangSelect" onchange="changeLanguage(this.value)" style="font-size: 12px; font-weight:700;">
+                    <option value="en">🌐 EN</option>
+                    <option value="km">🌐 ខ្មែរ</option>
+                </select>
+                <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌓 Mode</button>
+                <a onclick="switchPage('login')" data-i18n="loginRegister">Login / Register</a>
+            </div>
+        </div>
+
+        <!-- 1. HOME PAGE -->
+        <div id="home" class="page active-page">
+            <section class="hero">
+                <h1 data-i18n="heroTitle">TEY SHOP - New Season Styles</h1>
+                <p data-i18n="heroSubtitle">Discover minimalist wear, trendsetter outfits, and everyday comfort.</p>
+                <button class="btn" onclick="switchPage('shop')" style="background: #fff; color: #667eea;" data-i18n="heroBtn">Shop Collection Now</button>
+            </section>
+
+            <h2 class="section-title" data-i18n="newTrendyTitle">New Trendy Clothes</h2>
+            <div class="product-grid" id="homeNewGrid"></div>
+        </div>
+
+        <!-- 2. SHOP PAGE -->
+        <div id="shop" class="page">
+            <h2 data-i18n="shopCatalog">Shop Catalog</h2>
+            <br>
+            <div class="controls-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search products by name..." oninput="filterAndSortProducts()" data-i18n-placeholder="searchPlaceholder">
+                <select class="sort-select" id="sortSelect" onchange="filterAndSortProducts()">
+                    <option value="default" data-i18n="sortDefault">Default Sorting</option>
+                    <option value="low-high" data-i18n="sortLowHigh">Price: Low to High</option>
+                    <option value="high-low" data-i18n="sortHighLow">Price: High to Low</option>
+                    <option value="name" data-i18n="sortName">Name: A to Z</option>
+                </select>
+            </div>
+
+            <div class="category-bar">
+                <button class="cat-btn active" onclick="filterCategory('All', this)" data-i18n="catAll">All Items</button>
+                <button class="cat-btn" onclick="filterCategory('Men', this)" data-i18n="catMen">Men</button>
+                <button class="cat-btn" onclick="filterCategory('Women', this)" data-i18n="catWomen">Women</button>
+                <button class="cat-btn" onclick="filterCategory('Kids', this)" data-i18n="catKids">Kids</button>
+            </div>
+            <div class="product-grid" id="shopGrid"></div>
+        </div>
+
+        <!-- PRODUCT DETAILS PAGE -->
+        <div id="product-details" class="page">
+            <button class="btn btn-secondary" style="margin-bottom: 15px;" onclick="switchPage('shop')" data-i18n="backToShop">← Back to Shop</button>
+            <div class="detail-container">
+                <div class="detail-gallery">
+                    <div class="detail-main-img" id="detailMainImgBox">No Image</div>
+                    <div class="detail-thumbs" id="detailThumbsBox"></div>
+                </div>
+                <div>
+                    <h2 id="detailName" style="font-size: 22px; margin-bottom: 8px;">Product Name</h2>
+                    <p id="detailPrice" style="color: #ff5e62; font-size: 20px; font-weight: 800; margin-bottom: 12px;">$0.00</p>
+                    <p id="detailDesc" style="color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; font-size: 13px;">Detailed description.</p>
+                   
+                    <div class="options-group">
+                        <label data-i18n="labelSize">Size:</label>
+                        <div class="chip-container" id="sizeChips">
+                            <div class="chip selected" onclick="selectOption(this, 'size')">S</div>
+                            <div class="chip" onclick="selectOption(this, 'size')">M</div>
+                            <div class="chip" onclick="selectOption(this, 'size')">L</div>
+                            <div class="chip" onclick="selectOption(this, 'size')">XL</div>
+                        </div>
+                    </div>
+
+                    <div class="options-group">
+                        <label data-i18n="labelColor">Color:</label>
+                        <div class="chip-container" id="colorChips">
+                            <div class="chip selected" onclick="selectOption(this, 'color')">Black</div>
+                            <div class="chip" onclick="selectOption(this, 'color')">White</div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" style="flex: 2;" onclick="addCurrentToCart()" data-i18n="addToCart">Add to Cart 🛒</button>
+                        <button class="btn btn-secondary" style="flex: 1;" onclick="toggleCurrentFavorite()" data-i18n="addFav">❤️ Favorite</button>
+                    </div>
+
+                    <!-- REVIEWS SECTION -->
+                    <div class="review-section">
+                        <h4 data-i18n="reviewsTitle">Customer Reviews & Ratings ⭐</h4>
+                        <br>
+                        <div id="reviewList"></div>
+                        <div style="margin-top: 12px;">
+                            <input type="text" id="reviewInput" placeholder="Write your review..." style="width: 100%; padding: 8px 12px; margin-bottom: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); border-radius: 6px;" data-i18n-placeholder="writeReview">
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="submitReview()" data-i18n="submitReview">Submit Review</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. CART PAGE -->
+        <div id="cart" class="page">
+            <h2 data-i18n="cartTitle">Your Shopping Cart</h2>
+            <br>
+            <div id="cartContent"></div>
+        </div>
+
+        <!-- ORDER CHECKOUT -->
+        <div id="order" class="page">
+            <div class="form-container">
+                <h2 data-i18n="checkoutTitle">🚚 Complete Your Order & Payment</h2>
+                <br>
+                <div id="checkoutFormFields">
+                    <div class="form-group">
+                        <label data-i18n="labelName">Customer Name (ឈ្មោះពេញ)</label>
+                        <input type="text" id="orderName" placeholder="Enter your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="labelPhone">Phone Number (លេខទូរសព្ទ +855)</label>
+                        <input type="text" id="orderPhone" placeholder="012345678 / +855...">
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="labelAddress">Location / Delivery Address (អាសយដ្ឋានទីតាំង)</label>
+                        <textarea id="orderAddress" rows="3" placeholder="ផ្ទះលេខ, ផ្លូវ, សង្កាត់/ឃុំ, ខណ្ឌ/ស្រុក, រាជធានី-ខេត្ត"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="labelPromo">Promo Code (កូដបញ្ចុះតម្លៃ)</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="promoCodeInput" placeholder="e.g. TEY10">
+                            <button class="btn btn-secondary" onclick="applyPromoCode()" data-i18n="btnApply">Apply</button>
+                        </div>
+                        <small id="promoMsg" style="color: #38a169; font-size: 12px; display: block; margin-top: 4px;"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="labelPayment">Payment Method (វិធីសាស្ត្របង់ប្រាក់)</label>
+                        <select id="orderPaymentMethod" onchange="togglePaymentInfo()">
+                            <option value="ABA">ABA Pay / KHQR (បង់ប្រាក់តាម QR)</option>
+                            <option value="COD">Cash on Delivery (បង់ប្រាក់ពេលទទួលទំនិញ)</option>
+                        </select>
+                    </div>
+
+                    <!-- DYNAMIC PAYMENT BOX FOR CUSTOMERS -->
+                    <div id="abaPaymentBox" style="background: var(--bg-body); border: 1px solid var(--border-color); padding: 15px; margin-bottom: 15px; text-align: center; border-radius: 10px;">
+                        <p style="font-weight: 700; margin-bottom: 6px; color: var(--accent); font-size:14px;" id="custDisplayPayName">ABA Pay / KHQR Account Info</p>
+                        <p style="font-size: 13px; margin-bottom: 4px;"><strong>Account Number:</strong> <span id="custDisplayPayAccNum">001 234 567 (TEY SHOP)</span></p>
+                        <p style="font-size: 11px; color: var(--text-muted);" id="custDisplayPayDesc">សូមស្កេន QR ខាងក្រោម ឬโอนប្រាក់តាមលេខគណនីខាងលើ៖</p>
+                        <div id="custDisplayQrBox" style="margin: 10px auto; width: 130px; height: 130px; background: var(--card-bg); display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border-color); font-size: 11px; color: var(--text-muted); border-radius: 8px; overflow: hidden;">
+                            [ABA QR Code]
+                        </div>
+                    </div>
+
+                    <div style="background: var(--bg-body); padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 14px;">
+                        <strong data-i18n="totalPayable">Total Payable: </strong> <span id="checkoutTotal" style="color: #ff5e62; font-weight: 700;">$0.00</span>
+                    </div>
+                    <button class="btn" style="width: 100%;" onclick="placeOrder()" data-i18n="placeOrderBtn">Place Order Now 🚀</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. FAVORITES PAGE -->
+        <div id="favorites" class="page">
+            <h2 data-i18n="favTitle">❤️ Your Favorite Items</h2>
+            <br>
+            <div class="product-grid" id="favoritesGrid"></div>
+        </div>
+
+        <!-- 5. MY ORDERS PAGE -->
+        <div id="orders" class="page">
+            <h2 data-i18n="ordersTitle">📦 My Orders History</h2>
+            <br>
+            <div id="orderHistoryList" style="background:var(--card-bg); padding:15px; border:1px solid var(--border-color); border-radius:12px;">
+                <p style="color: var(--text-muted); font-size: 13px;">No past orders recorded yet.</p>
+            </div>
+        </div>
+
+        <!-- 6. PROFILE PAGE -->
+        <div id="profile" class="page">
+            <h2 data-i18n="profileTitle">👤 Customer Profile</h2>
+            <br>
+            <div class="form-container" style="margin: 0; max-width: 100%;" id="profileContainerBox"></div>
+        </div>
+
+        <!-- 7. SETTINGS PAGE -->
+        <div id="settings" class="page">
+            <h2 data-i18n="settingsTitle">⚙ App Settings</h2>
+            <br>
+            <div class="form-container" style="margin: 0; max-width: 100%;">
+                <div class="form-group">
+                    <label data-i18n="langLabel">Language (ភាសា)</label>
+                    <select id="settingsLangSelect" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="km">Khmer (ខ្មែរ)</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="showToast('Settings saved successfully!')" data-i18n="savePref">Save Preferences</button>
+
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
+
+                <h3 data-i18n="csTitle" style="font-size: 16px;">🎧 Customer Service (សេវាកម្មអតិថិជន)</h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" data-i18n="csDesc">Need help? Contact our support team directly through the details below:</p>
+               
+                <div class="cs-card">
+                    <div class="cs-item">
+                        <span>📞</span>
+                        <div><strong data-i18n="csPhone">Phone Support:</strong> <span id="csDisplayPhone">+855 12 345 678 / +855 98 765 432</span></div>
+                    </div>
+                    <div class="cs-item">
+                        <span>💬</span>
+                        <div><strong>Telegram:</strong> <a id="csDisplayTelegram" href="https://t.me/teyshop_support" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 600;">@teyshop_support</a></div>
+                    </div>
+                    <div class="cs-item">
+                        <span>✉️</span>
+                        <div><strong>Email:</strong> <span id="csDisplayEmail">support@teyshop.com</span></div>
+                    </div>
+                    <div class="cs-item">
+                        <span>⏰</span>
+                        <div><strong data-i18n="csHours">Working Hours:</strong> <span id="csDisplayHours">Mon - Sun (8:00 AM - 10:00 PM)</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOGIN & REGISTER PAGE -->
+        <div id="login" class="page">
+            <div class="form-container">
+                <h2 id="authFormTitle" data-i18n="loginTitle" style="font-size: 20px;">Customer Login</h2>
+                <br>
+               
+                <div class="form-group" id="nameFieldGroup" style="display: none;">
+                    <label data-i18n="labelUsername">Username (ឈ្មោះអ្នកប្រើប្រាស់)</label>
+                    <input type="text" id="regName" placeholder="Enter your username">
+                </div>
+
+                <div class="form-group" id="phoneFieldGroup">
+                    <label data-i18n="labelPhoneNo">Phone Number (លេខទូរសព្ទ)</label>
+                    <input type="tel" id="authPhone" placeholder="012345678">
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="labelPass">Password (ពាក្យសម្ងាត់)</label>
+                    <input type="password" id="authPass" placeholder="Enter password">
+                </div>
+
+                <button class="btn" style="width: 100%;" id="authSubmitBtn" onclick="handleLoginSubmit()" data-i18n="btnLogin">Login</button>
+                <p style="text-align: center; margin-top: 15px; font-size: 13px;">
+                    <span id="authToggleText">Don't have an account? <a href="#" onclick="toggleAuthMode(event)" style="color:var(--accent); font-weight:600;">Create Account</a></span>
+                </p>
+            </div>
+        </div>
+
+        <!-- ADMIN PANEL PAGE -->
+        <div id="admin" class="page">
+            <div id="adminLoginBox" class="form-container">
+                <h2 style="font-size: 20px;">Admin Login</h2>
+                <br>
+                <div class="form-group"><label>Username</label><input type="text" id="adminUser" placeholder="Enter username"></div>
+                <div class="form-group"><label>Password</label><input type="password" id="adminPass" placeholder="Enter password"></div>
+                <button class="btn" style="width: 100%;" onclick="loginAdmin()">Login to Admin</button>
+            </div>
+
+            <div id="adminDashboard" style="display: none;">
+                <div class="admin-layout">
+                    <div class="admin-sidebar" id="adminSidebar">
+                        <div class="admin-sidebar-header">
+                            <span>Admin Menu</span>
+                        </div>
+                        <ul class="admin-menu-list" id="adminMenuListContainer">
+                            <li id="admin-menu-dashboard" class="active-admin-tab" onclick="switchAdminSubPage('dashboard')">📊 Dashboard</li>
+                            <li id="admin-menu-products" onclick="switchAdminSubPage('products')">👕 Products</li>
+                            <li id="admin-menu-orders" onclick="switchAdminSubPage('orders')">📦 Orders</li>
+                            <li id="admin-menu-customers" onclick="switchAdminSubPage('customers')">👥 Customers</li>
+                            <li id="admin-menu-payment" onclick="switchAdminSubPage('payment')">💳 Payment Settings</li>
+                            <li id="admin-menu-cs" onclick="switchAdminSubPage('cs')">🎧 Customer Service</li>
+                            <li style="color:#ff6b6b;" onclick="logoutAdmin()">🚪 Logout</li>
+                        </ul>
+                    </div>
+
+                    <div class="admin-content-area">
+                        <!-- 1. DASHBOARD -->
+                        <div id="admin-sub-dashboard" class="admin-sub-page active-admin-sub-page">
+                            <h3>📊 Dashboard Overview</h3><br>
+                            <div class="stat-grid">
+                                <div class="stat-card"><h4>Total Products</h4><p id="statTotalProducts">0</p></div>
+                                <div class="stat-card"><h4>Total Orders</h4><p id="statTotalOrders">0</p></div>
+                                <div class="stat-card"><h4>Total Customers</h4><p id="statTotalCustomers">0</p></div>
+                            </div>
+                        </div>
+
+                        <!-- 2. PRODUCTS -->
+                        <div id="admin-sub-products" class="admin-sub-page">
+                            <h3 id="productFormHeaderTitle">👕 Add New Product</h3><br>
+                            <input type="hidden" id="editProdId" value="">
+                            <div class="form-group"><label>Product Name</label><input type="text" id="newProdName" placeholder="e.g. Vintage Leather Jacket"></div>
+                            <div class="form-group"><label>Category</label>
+                                <select id="newProdCat">
+                                    <option value="Men">Men</option>
+                                    <option value="Women">Women</option>
+                                    <option value="Kids">Kids</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Price ($)</label><input type="text" id="newProdPrice" placeholder="29.99"></div>
+                           
+                            <div class="form-group">
+                                <label>Product Pictures (Up to 6 Pictures)</label>
+                                <input type="file" id="newProdImages" accept="image/*" multiple onchange="previewSelectedImages(event)">
+                                <div class="image-preview-container" id="adminImgPreviewGrid">
+                                    <div class="preview-box">Pic 1</div>
+                                    <div class="preview-box">Pic 2</div>
+                                    <div class="preview-box">Pic 3</div>
+                                    <div class="preview-box">Pic 4</div>
+                                    <div class="preview-box">Pic 5</div>
+                                    <div class="preview-box">Pic 6</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label>Description</label><textarea id="newProdDesc" rows="2" placeholder="Brief description..."></textarea></div>
+                           
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn" id="productActionBtn" onclick="saveOrUpdateProduct()">Add Item</button>
+                                <button class="btn btn-secondary" id="cancelEditBtn" style="display:none;" onclick="resetProductForm()">← Cancel / Reset</button>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="admin-table">
+                                   <thead><tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Action</th></tr></thead>
+                                   <tbody id="adminProductsTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 3. ORDERS -->
+                        <div id="admin-sub-orders" class="admin-sub-page">
+                            <h3>📦 Orders Management</h3><br>
+                            <div class="controls-bar">
+                                <input type="text" class="search-input" id="adminOrderSearchInput" placeholder="ស្វែងរកតាម ID, ឈ្មោះ, ឬ លេខទូរសព្ទ..." oninput="renderAdminOrdersTable()">
+                                <select class="sort-select" id="adminOrderStatusFilter" onchange="renderAdminOrdersTable()">
+                                    <option value="All">--- បែងចែកតាម Status (ទាំងអស់) ---</option>
+                                    <option value="មិនបង់ប្រាក់">1. មិនបង់ប្រាក់</option>
+                                    <option value="បានបង់ប្រាក់រួចរាល់">2. បានបង់ប្រាក់រួចរាល់</option>
+                                    <option value="កំពុងដឹកជញ្ជូន">3. កំពុងដឹកជញ្ជូន</option>
+                                    <option value="បានទៅដល់ទីតាំង">4. បានទៅដល់ទីតាំង</option>
+                                    <option value="បានបញ្ចប់">5. បានបញ្ចប់</option>
+                                </select>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="admin-table">
+                                   <thead>
+                                       <tr>
+                                           <th>Order ID</th>
+                                           <th>Customer Name</th>
+                                           <th>Phone</th>
+                                           <th>Payment</th>
+                                           <th>Total</th>
+                                           <th>Status</th>
+                                           <th>Actions</th>
+                                       </tr>
+                                   </thead>
+                                   <tbody id="adminOrdersTable">
+                                       <tr><td colspan="7">No order records found.</td></tr>
+                                   </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 4. CUSTOMERS -->
+                        <div id="admin-sub-customers" class="admin-sub-page">
+                            <h3>👥 Customers Management</h3><br>
+                            <div class="table-responsive">
+                                <table class="admin-table">
+                                   <thead><tr><th>Username</th><th>Phone Number</th><th>Status</th><th>Actions</th></tr></thead>
+                                   <tbody id="adminCustomersTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 5. PAYMENT MANAGEMENT PAGE -->
+                        <div id="admin-sub-payment" class="admin-sub-page">
+                            <h3>💳 Edit Payment Settings (កែប្រែព័ត៌មានបង់ប្រាក់)</h3>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">កែប្រែព័ត៌មានគណនីបង់ប្រាក់ និងរូបភាព QR Code สำหรับបង្ហាញជូន Customer ពេលបញ្ជាទិញ</p>
+
+                            <div style="max-width: 600px;">
+                                <div class="form-group">
+                                    <label>Account / Title Name (ឈ្មោះវិធីសាស្ត្រ/គណនី)</label>
+                                    <input type="text" id="adminPayTitle" placeholder="e.g. ABA Pay / KHQR Account Info">
+                                </div>
+                                <div class="form-group">
+                                    <label>Account Number / Holder (លេខគណនី និងឈ្មោះម្ចាស់)</label>
+                                    <input type="text" id="adminPayAccount" placeholder="e.g. 001 234 567 (TEY SHOP)">
+                                </div>
+                                <div class="form-group">
+                                    <label>Instruction / Description (ការណែនាំបង់ប្រាក់)</label>
+                                    <textarea id="adminPayDesc" rows="2" placeholder="e.g. សូមស្កេន QR ខាងក្រោម ឬโอนប្រាក់តាមលេខគណនីខាងលើ៖"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Upload ABA / Payment QR Image (រូបភាព KHQR / QR Code)</label>
+                                    <input type="file" id="adminPayQrInput" accept="image/*" onchange="previewPaymentQrImage(event)">
+                                    <div style="margin-top: 8px;">
+                                        <label style="font-size: 11px; color: var(--text-muted);">Current QR Preview:</label>
+                                        <div id="adminQrPreviewBox" style="width: 120px; height: 120px; border: 1px dashed var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--bg-body); font-size: 11px; color: var(--text-muted);">
+                                            No QR Image
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="btn" onclick="savePaymentConfig()">💾 Save Payment Settings (រក្សាទុក)</button>
+                            </div>
+                        </div>
+
+                        <!-- 6. CUSTOMER SERVICE -->
+                        <div id="admin-sub-cs" class="admin-sub-page">
+                            <h3>🎧 Edit Customer Service Information</h3>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">កែប្រែព័ត៌មានទាក់ទងសេវាកម្មអតិថិជន ដើម្បីបង្ហាញនៅលើ App Settings</p>
+                           
+                            <div style="max-width: 600px;">
+                                <div class="form-group">
+                                    <label>Phone Support (លេខទូរសព្ទជំនួយ)</label>
+                                    <input type="text" id="adminCsPhone" placeholder="+855 12 345 678 / +855 98 765 432">
+                                </div>
+                                <div class="form-group">
+                                    <label>Telegram Handle / Username (ឧទាហរណ៍: @teyshop_support)</label>
+                                    <input type="text" id="adminCsTelegram" placeholder="@teyshop_support">
+                                </div>
+                                <div class="form-group">
+                                    <label>Telegram Link (តំណភ្ជាប់ Telegram ពេញលេញ)</label>
+                                    <input type="text" id="adminCsTelegramLink" placeholder="https://t.me/teyshop_support">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email Support (អ៊ីមែល)</label>
+                                    <input type="text" id="adminCsEmail" placeholder="support@teyshop.com">
+                                </div>
+                                <div class="form-group">
+                                    <label>Working Hours (ម៉ោងធ្វើការ)</label>
+                                    <input type="text" id="adminCsHours" placeholder="Mon - Sun (8:00 AM - 10:00 PM)">
+                                </div>
+
+                                <button class="btn" onclick="saveCustomerServiceConfig()">💾 Save Changes (រក្សាទុក)</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="bottom-nav">
+        <a class="bottom-nav-item active" id="bnav-home" onclick="switchPage('home')">
+            <span class="icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <a class="bottom-nav-item" id="bnav-shop" onclick="switchPage('shop')">
+            <span class="icon">👕</span>
+            <span>Shop</span>
+        </a>
+        <a class="bottom-nav-item" id="bnav-cart" onclick="switchPage('cart')">
+            <span class="icon">🛒</span>
+            <span>Cart</span>
+        </a>
+        <a class="bottom-nav-item" id="bnav-favorites" onclick="switchPage('favorites')">
+            <span class="icon">❤️</span>
+            <span>Favorites</span>
+        </a>
+        <a class="bottom-nav-item" id="bnav-profile" onclick="switchPage('profile')">
+            <span class="icon">👤</span>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- SCRIPTS -->
+    <script>
+        // --- TRANSLATIONS DICTIONARY ---
+        const translations = {
+            en: {
+                menuHome: "🏠 Home", menuShop: "👕 Shop", menuCart: "🛒 Cart", menuFavorites: "❤️ Favorites",
+                menuOrders: "📦 My Orders", menuProfile: "👤 Profile", menuSettings: "⚙ Settings", menuAdmin: "🔒 Admin Panel",
+                loginRegister: "Login / Register", heroTitle: "TEY SHOP - New Season Styles",
+                heroSubtitle: "Discover minimalist wear, trendsetter outfits, and everyday comfort.",
+                heroBtn: "Shop Collection Now", newTrendyTitle: "New Trendy Clothes", shopCatalog: "Shop Catalog",
+                searchPlaceholder: "Search products by name...", sortDefault: "Default Sorting", sortLowHigh: "Price: Low to High",
+                sortHighLow: "Price: High to Low", sortName: "Name: A to Z", catAll: "All Items", catMen: "Men",
+                catWomen: "Women", catKids: "Kids", backToShop: "← Back to Shop", labelSize: "Size:", labelColor: "Color:",
+                addToCart: "Add to Cart 🛒", addFav: "❤️ Favorite", reviewsTitle: "Customer Reviews & Ratings ⭐",
+                writeReview: "Write your review...", submitReview: "Submit Review", cartTitle: "Your Shopping Cart",
+                checkoutTitle: "🚚 Complete Your Order & Payment", labelName: "Customer Name (Full Name)",
+                labelPhone: "Phone Number (+855)", labelAddress: "Location / Delivery Address", labelPromo: "Promo Code",
+                btnApply: "Apply", labelPayment: "Payment Method", abaDesc: "Please scan the QR code below or transfer to the account above:",
+                totalPayable: "Total Payable: ", placeOrderBtn: "Place Order Now 🚀", favTitle: "❤️ Your Favorite Items",
+                ordersTitle: "📦 My Orders History", profileTitle: "👤 Customer Profile", settingsTitle: "⚙ App Settings",
+                langLabel: "Language (ភាសា)", savePref: "Save Preferences", csTitle: "🎧 Customer Service",
+                csDesc: "Need help? Contact our support team directly through the details below:",
+                csPhone: "Phone Support:", csHours: "Working Hours:", loginTitle: "Customer Login", regTitle: "Create Account",
+                labelUsername: "Username", labelPhoneNo: "Phone Number", labelPass: "Password", btnLogin: "Login",
+                viewDetails: "View Details", buyNow: "BUY NOW"
+            },
+            km: {
+                menuHome: "🏠 ទំព័រដើម", menuShop: "👕 ទំនិញ", menuCart: "🛒 កន្ត្រក", menuFavorites: "❤️ ការចូលចិត្ត",
+                menuOrders: "📦 ប្រវត្តិបញ្ជាទិញ", menuProfile: "👤 គណនី", menuSettings: "⚙ ការកំណត់", menuAdmin: "🔒 Admin Panel",
+                loginRegister: "ចូលប្រើ / ចុះឈ្មោះ", heroTitle: "TEY SHOP - ម៉ូដសំលៀកបំពាក់រដូវកាលថ្មី",
+                heroSubtitle: "ស្វែងរកម៉ូដទាន់សម័យ ផាសុកភាព និងភាពទាក់ទាញជារៀងរាល់ថ្ងៃ។", heroBtn: "ទិញទំនិញឥឡូវនេះ",
+                newTrendyTitle: "ខោអាវម៉ូដថ្មីៗពេញនិយម", shopCatalog: "កាតាឡុកទំនិញ", searchPlaceholder: "ស្វែងរកទំនិញតាមឈ្មោះ...",
+                sortDefault: "តម្រៀបតាមធម្មតា", sortLowHigh: "តម្លៃ៖ ទាបទៅខ្ពស់", sortHighLow: "តម្លៃ៖ ខ្ពស់ទៅទាប",
+                sortName: "ឈ្មោះ៖ A ទៅ Z", catAll: "ទំនិញទាំងអស់", catMen: "បុរស", catWomen: "នារី", catKids: "កុមារ",
+                backToShop: "← ត្រឡប់ទៅហាង", labelSize: "ទំហំ:", labelColor: "ពណ៌:", addToCart: "ថែមចូលកន្ត្រក 🛒",
+                addFav: "❤️ ចូលចិត្ត", reviewsTitle: "មតិយោបល់ និងការវាយតម្លៃ ⭐", writeReview: "សរសេរមតិយោបល់របស់អ្នក...",
+                submitReview: "ផ្ញើមតិយោបល់", cartTitle: "កន្ត្រកទំនិញរបស់អ្នក", checkoutTitle: "🚚 បំពេញព័ត៌មានបញ្ជាទិញ & បង់ប្រាក់",
+                labelName: "ឈ្មោះអតិថិជន (ឈ្មោះពេញ)", labelPhone: "លេខទូរសព្ទ (+855)", labelAddress: "អាសយដ្ឋានដឹកជញ្ជូន",
+                labelPromo: "កូដបញ្ចុះតម្លៃ", btnApply: "ប្រើប្រាស់", labelPayment: "វិធីសាស្ត្របង់ប្រាក់",
+                abaDesc: "សូមស្កេន QR ខាងក្រោម ឬโอนប្រាក់តាមលេខគណនីខាងលើ៖", totalPayable: "ទឹកប្រាក់ត្រូវបង់សរុប៖ ",
+                placeOrderBtn: "បញ្ជាទិញឥឡូវនេះ 🚀", favTitle: "❤️ ទំនិញដែលអ្នកចូលចិត្ត", ordersTitle: "📦 ប្រវត្តិនៃការបញ្ជាទិញ",
+                profileTitle: "👤 ព័ត៌មានគណនី", settingsTitle: "⚙ ការកំណត់កម្មវិធី", langLabel: "ភាសា (Language)",
+                savePref: "រក្សាទុកការកំណត់", csTitle: "🎧 សេវាកម្មអតិថិជន", csDesc: "ត្រូវការជំនួយ? ទាក់ទងក្រុមការងាររបស់យើងផ្ទាល់តាមរយៈព័ត៌មានខាងក្រោម៖",
+                csPhone: "លេខទូរសព្ទជំនួយ៖", csHours: "ម៉ោងធ្វើការ៖", loginTitle: "ចូលប្រើប្រាស់គណនី", regTitle: "បង្កើតគណនីថ្មី",
+                labelUsername: "ឈ្មោះអ្នកប្រើប្រាស់", labelPhoneNo: "លេខទូរសព្ទ", labelPass: "ពាក្យសម្ងាត់", btnLogin: "ចូលប្រព័ន្ធ",
+                viewDetails: "មើលលម្អិត", buyNow: "ទិញភ្លាមៗ"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const topSelect = document.getElementById('topLangSelect');
+            const settingsSelect = document.getElementById('settingsLangSelect');
+            if (topSelect) topSelect.value = lang;
+            if (settingsSelect) settingsSelect.value = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    elem.innerText = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    elem.placeholder = translations[lang][key];
+                }
+            });
+
+            renderHome();
+            renderShop(products);
+            showToast(lang === 'km' ? "បានផ្លាស់ប្តូរភាសាទៅជា ភាសាខ្មែរ" : "Language changed to English");
+        }
+
+        let products = [
+            { id: 1, name: "Classic White T-Shirt", category: "Men", price: 19.99, images: [], desc: "Premium cotton everyday white tee.", reviews: ["Great quality!", "Fits perfectly."] },
+            { id: 2, name: "Slim Fit Denim Jeans", category: "Men", price: 49.99, images: [], desc: "Rugged stretch denim trousers.", reviews: ["Very comfortable jeans."] }
+        ];
+
+        let customersDB = [{ name: "John Doe", phone: "012345678", password: "password123", status: "active" }];
+       
+        let customerServiceData = {
+            phone: "+855 12 345 678 / +855 98 765 432",
+            telegramHandle: "@teyshop_support",
+            telegramLink: "https://t.me/teyshop_support",
+            email: "support@teyshop.com",
+            hours: "Mon - Sun (8:00 AM - 10:00 PM)"
+        };
+
+        let paymentData = {
+            title: "ABA Pay / KHQR Account Info",
+            accountNumber: "001 234 567 (TEY SHOP)",
+            description: "សូមស្កេន QR ខាងក្រោម ឬโอนប្រាក់តាមលេខគណនីខាងលើ៖",
+            qrImage: ""
+        };
+
+        let tempAdminQrImage = "";
+        let loggedInCustomer = null;
+        let isRegisterView = false;
+        let cart = [];
+        let favorites = [];
+        let ordersHistory = [];
+        let currentSelectedProduct = null;
+        let selectedSize = 'S';
+        let selectedColor = 'Black';
+        let discountMultiplier = 1;
+
+        let currentFormImages = [];
+        let pendingActionType = null;
+        let pendingProduct = null;
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            if(body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                showToast("Dark mode enabled");
+            } else {
+                body.setAttribute('data-theme', 'light');
+                showToast("Light mode enabled");
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('mobile-open');
+        }
+
+        function togglePaymentInfo() {
+            const method = document.getElementById('orderPaymentMethod').value;
+            const abaBox = document.getElementById('abaPaymentBox');
+            abaBox.style.display = (method === 'ABA') ? 'block' : 'none';
+        }
+
+        function renderCustomerPaymentDisplay() {
+            document.getElementById('custDisplayPayName').innerText = paymentData.title;
+            document.getElementById('custDisplayPayAccNum').innerText = paymentData.accountNumber;
+            document.getElementById('custDisplayPayDesc').innerText = paymentData.description;
+
+            const qrBox = document.getElementById('custDisplayQrBox');
+            if(paymentData.qrImage) {
+                qrBox.innerHTML = `<img src="${paymentData.qrImage}" style="width:100%; height:100%; object-fit:cover;">`;
+            } else {
+                qrBox.innerHTML = `[ABA QR Code]`;
+            }
+        }
+
+        function populateAdminPaymentForm() {
+            document.getElementById('adminPayTitle').value = paymentData.title;
+            document.getElementById('adminPayAccount').value = paymentData.accountNumber;
+            document.getElementById('adminPayDesc').value = paymentData.description;
+            
+            const prevBox = document.getElementById('adminQrPreviewBox');
+            if(paymentData.qrImage) {
+                prevBox.innerHTML = `<img src="${paymentData.qrImage}" style="width:100%; height:100%; object-fit:cover;">`;
+            } else {
+                prevBox.innerHTML = `No QR Image`;
+            }
+            tempAdminQrImage = paymentData.qrImage;
+        }
+
+        function previewPaymentQrImage(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                tempAdminQrImage = e.target.result;
+                document.getElementById('adminQrPreviewBox').innerHTML = `<img src="${tempAdminQrImage}" style="width:100%; height:100%; object-fit:cover;">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function savePaymentConfig() {
+            const title = document.getElementById('adminPayTitle').value.trim();
+            const account = document.getElementById('adminPayAccount').value.trim();
+            const desc = document.getElementById('adminPayDesc').value.trim();
+
+            if(!title || !account) {
+                showToast("សូមបំពេញឈ្មោះវិធីសាស្ត្រ និងលេខគណនី!");
+                return;
+            }
+
+            paymentData.title = title;
+            paymentData.accountNumber = account;
+            paymentData.description = desc;
+            paymentData.qrImage = tempAdminQrImage;
+
+            renderCustomerPaymentDisplay();
+            showToast("បានបច្ចុប្បន្នភាព Payment Settings ជោគជ័យ!");
+        }
+
+        function renderCustomerServiceInfo() {
+            document.getElementById('csDisplayPhone').innerText = customerServiceData.phone;
+            const tgElem = document.getElementById('csDisplayTelegram');
+            tgElem.innerText = customerServiceData.telegramHandle;
+            tgElem.href = customerServiceData.telegramLink;
+            document.getElementById('csDisplayEmail').innerText = customerServiceData.email;
+            document.getElementById('csDisplayHours').innerText = customerServiceData.hours;
+        }
+
+        function populateAdminCsForm() {
+            document.getElementById('adminCsPhone').value = customerServiceData.phone;
+            document.getElementById('adminCsTelegram').value = customerServiceData.telegramHandle;
+            document.getElementById('adminCsTelegramLink').value = customerServiceData.telegramLink;
+            document.getElementById('adminCsEmail').value = customerServiceData.email;
+            document.getElementById('adminCsHours').value = customerServiceData.hours;
+        }
+
+        function saveCustomerServiceConfig() {
+            const phone = document.getElementById('adminCsPhone').value.trim();
+            const telegramHandle = document.getElementById('adminCsTelegram').value.trim();
+            const telegramLink = document.getElementById('adminCsTelegramLink').value.trim();
+            const email = document.getElementById('adminCsEmail').value.trim();
+            const hours = document.getElementById('adminCsHours').value.trim();
+
+            if(!phone || !telegramHandle || !email) {
+                showToast("សូមបំពេញព័ត៌មានឱ្យបានគ្រប់ជ្រុងជ្រោយ!");
+                return;
+            }
+
+            customerServiceData.phone = phone;
+            customerServiceData.telegramHandle = telegramHandle;
+            customerServiceData.telegramLink = telegramLink || `https://t.me/${telegramHandle.replace('@','')}`;
+            customerServiceData.email = email;
+            customerServiceData.hours = hours;
+
+            renderCustomerServiceInfo();
+            showToast("បានបច្ចុប្បន្នភាពព័ត៌មាន Customer Service ជោគជ័យ!");
+        }
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.querySelectorAll('.menu-list li').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+           
+            document.getElementById(pageId).classList.add('active-page');
+            const activeMenu = document.getElementById('menu-' + pageId);
+            if(activeMenu) activeMenu.classList.add('active');
+
+            const activeBNav = document.getElementById('bnav-' + pageId);
+            if(activeBNav) activeBNav.classList.add('active');
+           
+            document.getElementById('sidebar').classList.remove('mobile-open');
+            window.scrollTo(0, 0);
+           
+            if(pageId === 'home') renderHome();
+            if(pageId === 'shop') renderShop(products);
+            if(pageId === 'cart') renderCart();
+            if(pageId === 'favorites') renderFavorites();
+            if(pageId === 'orders') renderOrders();
+            if(pageId === 'profile') renderProfile();
+            if(pageId === 'settings') renderCustomerServiceInfo();
+            if(pageId === 'order') prepareCheckoutForm();
+            if(pageId === 'admin') updateAdminDashboardStats();
+        }
+
+        function switchAdminSubPage(subPageId) {
+            document.querySelectorAll('.admin-sub-page').forEach(p => p.classList.remove('active-admin-sub-page'));
+            document.querySelectorAll('.admin-menu-list li').forEach(l => l.classList.remove('active-admin-tab'));
+           
+            document.getElementById('admin-sub-' + subPageId).classList.add('active-admin-sub-page');
+            const activeSubMenu = document.getElementById('admin-menu-' + subPageId);
+            if(activeSubMenu) activeSubMenu.classList.add('active-admin-tab');
+
+            if(subPageId === 'dashboard') updateAdminDashboardStats();
+            if(subPageId === 'products') renderAdminProductsTable();
+            if(subPageId === 'customers') renderAdminCustomersTable();
+            if(subPageId === 'orders') renderAdminOrdersTable();
+            if(subPageId === 'payment') populateAdminPaymentForm();
+            if(subPageId === 'cs') populateAdminCsForm();
+        }
+
+        function updateAdminDashboardStats() {
+            document.getElementById('statTotalProducts').innerText = products.length;
+            document.getElementById('statTotalOrders').innerText = ordersHistory.length;
+            document.getElementById('statTotalCustomers').innerText = customersDB.length;
+        }
+
+        function toggleAuthMode(e) {
+            if(e) e.preventDefault();
+            isRegisterView = !isRegisterView;
+            const title = document.getElementById('authFormTitle');
+            const nameField = document.getElementById('nameFieldGroup');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const toggleText = document.getElementById('authToggleText');
+
+            if(isRegisterView) {
+                title.innerText = translations[currentLang].regTitle;
+                nameField.style.display = "block";
+                submitBtn.innerText = translations[currentLang].regTitle;
+                toggleText.innerHTML = `Already have an account? <a href="#" onclick="toggleAuthMode(event)" style="color:var(--accent); font-weight:600;">Login here</a>`;
+            } else {
+                title.innerText = translations[currentLang].loginTitle;
+                nameField.style.display = "none";
+                submitBtn.innerText = translations[currentLang].btnLogin;
+                toggleText.innerHTML = `Don't have an account? <a href="#" onclick="toggleAuthMode(event)" style="color:var(--accent); font-weight:600;">Create Account</a>`;
+            }
+        }
+
+        function handleLoginSubmit() {
+            const phoneInput = document.getElementById('authPhone').value.trim();
+            const passInput = document.getElementById('authPass').value.trim();
+
+            if(!phoneInput || !passInput) {
+                showToast(currentLang === 'km' ? "សូមបំពេញលេខទូរសព្ទ និង Password!" : "Please fill in phone and password!");
+                return;
+            }
+
+            if(isRegisterView) {
+                const nameInput = document.getElementById('regName').value.trim();
+                if(!nameInput) { showToast(currentLang === 'km' ? "សូមបំពេញ Username!" : "Please enter username!"); return; }
+
+                if(customersDB.some(c => c.phone === phoneInput)) {
+                    showToast(currentLang === 'km' ? "លេខទូរសព្ទនេះត្រូវបានចុះឈ្មោះរួចហើយ!" : "Phone already registered!");
+                    return;
+                }
+
+                const newAccount = { name: nameInput, phone: phoneInput, password: passInput, status: "active" };
+                customersDB.push(newAccount);
+                loggedInCustomer = newAccount;
+                showToast(currentLang === 'km' ? "បង្កើតគណនីបានជោគជ័យ!" : "Account created successfully!");
+                updateTopNavAuth();
+                processPendingActionAfterLogin();
+            } else {
+                const found = customersDB.find(c => c.phone === phoneInput && c.password === passInput);
+                if(found) {
+                    if(found.status === 'blocked') {
+                        showToast(currentLang === 'km' ? "គណនីរបស់អ្នកត្រូវបាន Block / បិទដំណើការ!" : "Account is blocked!");
+                        return;
+                    }
+                    loggedInCustomer = found;
+                    showToast(currentLang === 'km' ? "ចូលគណនីបានជោគជ័យ!" : "Login successful!");
+                    updateTopNavAuth();
+                    processPendingActionAfterLogin();
+                } else {
+                    showToast(currentLang === 'km' ? "ព័ត៌មានមិនត្រឹមត្រូវ!" : "Invalid credentials!");
+                }
+            }
+        }
+
+        function processPendingActionAfterLogin() {
+            if(pendingActionType === 'buyNow' && pendingProduct) {
+                let prod = pendingProduct;
+                pendingProduct = null;
+                pendingActionType = null;
+                executeBuyNow(prod);
+            } else if(pendingActionType === 'cart' && pendingProduct) {
+                let prod = pendingProduct;
+                pendingProduct = null;
+                pendingActionType = null;
+                cart.push({ ...prod, size: selectedSize, color: selectedColor });
+                document.getElementById('cartCount').innerText = cart.length;
+                showToast("Added to cart successfully!");
+                switchPage('cart');
+            } else {
+                switchPage('profile');
+            }
+        }
+
+        function logoutCustomer() {
+            loggedInCustomer = null;
+            updateTopNavAuth();
+            showToast(currentLang === 'km' ? "បានចាកចេញពីគណនី" : "Logged out successfully.");
+            switchPage('home');
+        }
+
+        function updateTopNavAuth() {
+            const nav = document.getElementById('topAuthNav');
+            const langSelectHtml = `
+                <select id="topLangSelect" onchange="changeLanguage(this.value)" style="font-size: 12px; font-weight:700;">
+                    <option value="en" ${currentLang==='en'?'selected':''}>🌐 EN</option>
+                    <option value="km" ${currentLang==='km'?'selected':''}>🌐 ខ្មែរ</option>
+                </select>
+            `;
+            const themeBtnHtml = `<button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌓 Mode</button>`;
+            if(loggedInCustomer) {
+                nav.innerHTML = `${langSelectHtml} ${themeBtnHtml} <span style="font-size:12px; font-weight:700;">Hi, ${loggedInCustomer.name}</span> <button onclick="logoutCustomer()" style="cursor:pointer; padding:6px 10px; border:1px solid var(--border-color); background:var(--card-bg); border-radius:6px; font-weight:600; font-size:12px;">Logout</button>`;
+            } else {
+                nav.innerHTML = `${langSelectHtml} ${themeBtnHtml} <a onclick="switchPage('login')" data-i18n="loginRegister">${translations[currentLang].loginRegister}</a>`;
+            }
+        }
+
+        function renderProfile() {
+            const c = document.getElementById('profileContainerBox');
+            if(!loggedInCustomer) {
+                c.innerHTML = `<h3>Not logged in</h3><br><button class="btn" onclick="switchPage('login')">Login / Register</button>`;
+                return;
+            }
+            c.innerHTML = `<h3>Account Details</h3><br><p><strong>Username:</strong> ${loggedInCustomer.name}</p><br><p><strong>Phone Number:</strong> ${loggedInCustomer.phone}</p><br><button class="btn btn-secondary" onclick="logoutCustomer()">Logout</button>`;
+        }
+
+        function prepareCheckoutForm() {
+            const nameField = document.getElementById('orderName');
+            const phoneField = document.getElementById('orderPhone');
+            if(loggedInCustomer) {
+                nameField.value = loggedInCustomer.name;
+                nameField.readOnly = true;
+                phoneField.value = loggedInCustomer.phone;
+                phoneField.readOnly = true;
+            } else {
+                nameField.value = "";
+                nameField.readOnly = false;
+                phoneField.value = "";
+                phoneField.readOnly = false;
+            }
+            discountMultiplier = 1;
+            document.getElementById('promoCodeInput').value = "";
+            document.getElementById('promoMsg').innerText = "";
+            renderCustomerPaymentDisplay();
+            togglePaymentInfo();
+        }
+
+        function applyPromoCode() {
+            const code = document.getElementById('promoCodeInput').value.trim().toUpperCase();
+            const msg = document.getElementById('promoMsg');
+            if(code === "TEY10") {
+                discountMultiplier = 0.9;
+                msg.style.color = "#38a169";
+                msg.innerText = "Promo applied: 10% OFF!";
+                showToast("Promo code applied successfully!");
+            } else {
+                discountMultiplier = 1;
+                msg.style.color = "#e53e3e";
+                msg.innerText = "Invalid promo code!";
+                showToast("Invalid promo code!");
+            }
+            let baseTotal = cart.reduce((s, i) => s + i.price, 0);
+            document.getElementById('checkoutTotal').innerText = `$${(baseTotal * discountMultiplier).toFixed(2)}`;
+        }
+
+        function renderHome() {
+            document.getElementById('homeNewGrid').innerHTML = products.map(p => productCardHTML(p)).join('');
+        }
+
+        function filterAndSortProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const sortVal = document.getElementById('sortSelect').value;
+           
+            let filtered = products.filter(p => p.name.toLowerCase().includes(query));
+
+            if(sortVal === 'low-high') {
+                filtered.sort((a,b) => a.price - b.price);
+            } else if(sortVal === 'high-low') {
+                filtered.sort((a,b) => b.price - a.price);
+            } else if(sortVal === 'name') {
+                filtered.sort((a,b) => a.name.localeCompare(b.name));
+            }
+
+            renderShop(filtered);
+        }
+
+        function renderShop(list) {
+            document.getElementById('shopGrid').innerHTML = list.length ? list.map(p => productCardHTML(p)).join('') : "<p>No products found.</p>";
+        }
+
+        function productCardHTML(p) {
+            let cover = (p.images && p.images.length > 0) ? `<img src="${p.images[0]}" alt="${p.name}">` : p.name;
+            const viewText = translations[currentLang].viewDetails;
+            const buyText = translations[currentLang].buyNow;
+
+            return `
+                <div class="product-card">
+                    <div class="product-image" onclick="openProductDetail(${p.id})">${cover}</div>
+                    <div class="product-name" onclick="openProductDetail(${p.id})">${p.name}</div>
+                    <div class="product-price">$${p.price.toFixed(2)}</div>
+                    <div class="product-card-actions">
+                        <button class="btn btn-secondary" onclick="openProductDetail(${p.id})">${viewText}</button>
+                        <button class="btn btn-buy" onclick="buyNow(${p.id})">${buyText}</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buyNow(id) {
+            const prod = products.find(p => p.id === id);
+            if(!prod) return;
+
+            if(!loggedInCustomer) {
+                pendingProduct = prod;
+                pendingActionType = 'buyNow';
+                showToast(currentLang === 'km' ? "សូមចូលគណនីជាមុនសិន!" : "Please login first!");
+                switchPage('login');
+                return;
+            }
+
+            executeBuyNow(prod);
+        }
+
+        function executeBuyNow(prod) {
+            cart.push({ ...prod, size: 'S', color: 'Black' });
+            document.getElementById('cartCount').innerText = cart.length;
+            document.getElementById('checkoutTotal').innerText = `$${prod.price.toFixed(2)}`;
+            switchPage('order');
+        }
+
+        function filterCategory(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            let list = (cat === 'All') ? products : products.filter(p => p.category === cat);
+            renderShop(list);
+        }
+
+        function openProductDetail(id) {
+            currentSelectedProduct = products.find(p => p.id === id);
+            if(!currentSelectedProduct) return;
+            document.getElementById('detailName').innerText = currentSelectedProduct.name;
+            document.getElementById('detailPrice').innerText = `$${currentSelectedProduct.price.toFixed(2)}`;
+            document.getElementById('detailDesc').innerText = currentSelectedProduct.desc;
+            setupProductGallery(currentSelectedProduct.images || []);
+            renderReviews();
+            switchPage('product-details');
+        }
+
+        function setupProductGallery(images) {
+            const main = document.getElementById('detailMainImgBox');
+            const thumbs = document.getElementById('detailThumbsBox');
+            if(!images.length) { main.innerHTML = "No Image"; thumbs.innerHTML = ""; return; }
+            main.innerHTML = `<img src="${images[0]}">`;
+            thumbs.innerHTML = images.map((img, idx) => `
+                <div class="thumb-preview ${idx === 0 ? 'active-thumb' : ''}" onclick="changeMainImage('${img}', this)">
+                    <img src="${img}">
+                </div>
+            `).join('');
+        }
+
+        function changeMainImage(imgUrl, thumbEl) {
+            document.getElementById('detailMainImgBox').innerHTML = `<img src="${imgUrl}">`;
+            document.querySelectorAll('.thumb-preview').forEach(t => t.classList.remove('active-thumb'));
+            thumbEl.classList.add('active-thumb');
+        }
+
+        function selectOption(el, type) {
+            el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            if(type === 'size') selectedSize = el.innerText;
+            if(type === 'color') selectedColor = el.innerText;
+        }
+
+        function renderReviews() {
+            const list = document.getElementById('reviewList');
+            if(!currentSelectedProduct.reviews || !currentSelectedProduct.reviews.length) {
+                list.innerHTML = `<p style="font-size:12px; color:var(--text-muted);">No reviews yet.</p>`;
+                return;
+            }
+            list.innerHTML = currentSelectedProduct.reviews.map(r => `<div class="review-item">💬 ${r}</div>`).join('');
+        }
+
+        function submitReview() {
+            const text = document.getElementById('reviewInput').value.trim();
+            if(!text) { showToast(currentLang === 'km' ? "សូមសរសេរមតិយោបល់!" : "Please write a review!"); return; }
+            if(!currentSelectedProduct.reviews) currentSelectedProduct.reviews = [];
+            currentSelectedProduct.reviews.push(text);
+            document.getElementById('reviewInput').value = "";
+            renderReviews();
+            showToast("Review submitted successfully!");
+        }
+
+        function addCurrentToCart() {
+            if(!loggedInCustomer) {
+                pendingProduct = currentSelectedProduct;
+                pendingActionType = 'cart';
+                showToast(currentLang === 'km' ? "សូមចូលគណនីជាមុនសិន!" : "Please login first!");
+                switchPage('login');
+                return;
+            }
+
+            cart.push({ ...currentSelectedProduct, size: selectedSize, color: selectedColor });
+            document.getElementById('cartCount').innerText = cart.length;
+            showToast("Added to cart!");
+            switchPage('cart');
+        }
+
+        function toggleCurrentFavorite() {
+            if(!loggedInCustomer) {
+                showToast(currentLang === 'km' ? "សូមចូលគណនីជាមុនសិន!" : "Please login first!");
+                switchPage('login');
+                return;
+            }
+
+            if(!favorites.some(f => f.id === currentSelectedProduct.id)) {
+                favorites.push(currentSelectedProduct);
+                showToast("Added to favorites!");
+            } else {
+                favorites = favorites.filter(f => f.id !== currentSelectedProduct.id);
+                showToast("Removed from favorites!");
+            }
+            document.getElementById('favCount').innerText = favorites.length;
+        }
+
+        function renderCart() {
+            const c = document.getElementById('cartContent');
+            if(!cart.length) { c.innerHTML = "<p style='font-size:13px;'>Cart is empty.</p>"; return; }
+            let total = 0;
+            let html = `<div class="table-responsive"><table class="admin-table"><thead><tr><th>Item</th><th>Specs</th><th>Price</th><th>Action</th></tr></thead><tbody>`;
+            cart.forEach((item, idx) => {
+                total += item.price;
+                html += `<tr><td>${item.name}</td><td>${item.size} / ${item.color}</td><td>$${item.price.toFixed(2)}</td><td><button style="background:#ff5e62; color:white; border:none; padding:4px 8px; cursor:pointer; border-radius:4px; font-size:11px;" onclick="cart.splice(${idx},1); renderCart(); document.getElementById('cartCount').innerText=cart.length;">Remove</button></td></tr>`;
+            });
+            html += `</tbody></table></div><br><div style="text-align:right;"><h3>Total: $${total.toFixed(2)}</h3><br><button class="btn" onclick="switchPage('order');">Checkout</button></div>`;
+            c.innerHTML = html;
+        }
+
+        function renderFavorites() {
+            document.getElementById('favoritesGrid').innerHTML = favorites.length ? favorites.map(p => productCardHTML(p)).join('') : "<p style='font-size:13px;'>No favorites.</p>";
+        }
+
+        function placeOrder() {
+            const name = document.getElementById('orderName').value.trim();
+            const phone = document.getElementById('orderPhone').value.trim();
+            const address = document.getElementById('orderAddress').value.trim();
+            const paymentMethod = document.getElementById('orderPaymentMethod').value;
+
+            if(!name || !phone || !address) {
+                showToast(currentLang === 'km' ? "សូមបំពេញព័ត៌មានឱ្យបានគ្រប់គ្រាន់!" : "Please complete all information!");
+                return;
+            }
+
+            let baseTotal = cart.reduce((s, i) => s + i.price, 0);
+            let finalTotal = baseTotal * discountMultiplier;
+
+            ordersHistory.push({
+                id: Math.floor(Math.random()*90000+10000),
+                name: name,
+                phone: phone,
+                address: address,
+                paymentMethod: paymentMethod,
+                items: [...cart],
+                total: finalTotal,
+                status: "មិនបង់ប្រាក់"
+            });
+
+            showToast(currentLang === 'km' ? "ការបញ្ជាទិញបានជោគជ័យ!" : "Order placed successfully!");
+            cart = [];
+            document.getElementById('cartCount').innerText = 0;
+            switchPage('orders');
+        }
+
+        function renderOrders() {
+            const list = document.getElementById('orderHistoryList');
+            if(!ordersHistory.length) { list.innerHTML = "<p style='font-size:13px;'>No orders.</p>"; return; }
+            list.innerHTML = ordersHistory.map(o => {
+                let badgeClass = "badge-unpaid";
+                if(o.status === "បានបង់ប្រាក់រួចរាល់" || o.status === "បានបញ្ចប់") badgeClass = "badge-paid";
+                if(o.status === "កំពុងដឹកជញ្ជូន" || o.status === "បានទៅដល់ទីតាំង") badgeClass = "badge-info";
+
+                return `
+                    <div style="border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:12px; font-size:13px;">
+                        <strong>Order #${o.id} (${o.name})</strong> - <span class="badge ${badgeClass}">${o.status}</span>
+                        <p style="margin-top:4px;">📞 Phone: ${o.phone}</p>
+                        <p>📍 Location: ${o.address}</p>
+                        <p style="color:#ff5e62; font-weight:700;">💰 Total: $${o.total.toFixed(2)}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loginAdmin() {
+            if(document.getElementById('adminUser').value.trim() === "nanarokaly" && document.getElementById('adminPass').value.trim() === "Abcd2019") {
+                document.getElementById('adminLoginBox').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                switchAdminSubPage('dashboard');
+            } else { showToast("Incorrect credentials!"); }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('adminLoginBox').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+        }
+
+        function editCustomerPassword(index) {
+            const cust = customersDB[index];
+            if(!cust) return;
+
+            const newPassword = prompt(`បញ្ចូលពាក្យសម្ងាត់ថ្មីសម្រាប់អតិថិជន "${cust.name}":`, cust.password);
+            if(newPassword === null) return;
+
+            if(newPassword.trim() === "") {
+                showToast("ពាក្យសម្ងាត់មិនអាចទទេបានទេ!");
+                return;
+            }
+
+            cust.password = newPassword.trim();
+            showToast(`បានកែប្រែពាក្យសម្ងាត់សម្រាប់ (${cust.name}) ជោគជ័យ!`);
+        }
+
+        function toggleCustomerStatus(index) {
+            const cust = customersDB[index];
+            if(!cust) return;
+
+            if(cust.status === 'blocked') {
+                cust.status = 'active';
+                showToast(`បានបើកដំណើរការគណនី (${cust.name}) ឡើងវិញ!`);
+            } else {
+                cust.status = 'blocked';
+                if(loggedInCustomer && loggedInCustomer.phone === cust.phone) {
+                    logoutCustomer();
+                }
+                showToast(`បានបិទដំណើរការគណនី (${cust.name}) ជោគជ័យ!`);
+            }
+            renderAdminCustomersTable();
+        }
+
+        function renderAdminCustomersTable() {
+            document.getElementById('adminCustomersTable').innerHTML = customersDB.map((c, index) => {
+                const isBlocked = c.status === 'blocked';
+                const statusBadge = isBlocked
+                    ? `<span class="badge badge-blocked">Blocked</span>`
+                    : `<span class="badge badge-paid">Active</span>`;
+               
+                const toggleBtn = isBlocked
+                    ? `<button class="btn-success" onclick="toggleCustomerStatus(${index})">Unblock</button>`
+                    : `<button class="btn-warning" onclick="toggleCustomerStatus(${index})">Block</button>`;
+
+                return `
+                    <tr>
+                        <td>${c.name}</td>
+                        <td><strong>${c.phone}</strong></td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                                <button class="btn-info" onclick="editCustomerPassword(${index})">Edit PW</button>
+                                ${toggleBtn}
+                                <button class="btn-danger" onclick="customersDB.splice(${index},1); renderAdminCustomersTable(); updateAdminDashboardStats();">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function previewSelectedImages(event) {
+            const files = Array.from(event.target.files).slice(0, 6);
+            if(!files.length) return;
+
+            currentFormImages = [];
+            let loaded = 0;
+
+            files.forEach((file, idx) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentFormImages[idx] = e.target.result;
+                    loaded++;
+                    if(loaded === files.length) {
+                        updateImagePreviewGrid(currentFormImages);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function updateImagePreviewGrid(images) {
+            const container = document.getElementById('adminImgPreviewGrid');
+            let html = '';
+            for(let i = 0; i < 6; i++) {
+                if(images[i]) {
+                    html += `<div class="preview-box"><img src="${images[i]}"></div>`;
+                } else {
+                    html += `<div class="preview-box">Pic ${i + 1}</div>`;
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        function saveOrUpdateProduct() {
+            const editId = document.getElementById('editProdId').value;
+            const name = document.getElementById('newProdName').value.trim();
+            const category = document.getElementById('newProdCat').value;
+            const price = parseFloat(document.getElementById('newProdPrice').value);
+            const desc = document.getElementById('newProdDesc').value.trim() || "";
+
+            if(!name || isNaN(price)) { showToast("សូមបញ្ចូលឈ្មោះ និងតម្លៃទំនិញ!"); return; }
+
+            if(editId) {
+                let prod = products.find(p => p.id == editId);
+                if(prod) {
+                    prod.name = name;
+                    prod.category = category;
+                    prod.price = price;
+                    prod.desc = desc;
+                    if(currentFormImages.length > 0) {
+                        prod.images = [...currentFormImages];
+                    }
+                }
+                showToast("បានកែប្រែទំនិញ និងរូបភាពជោគជ័យ!");
+            } else {
+                const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+                products.push({ id: newId, name, category, price, images: [...currentFormImages], desc, reviews: [] });
+                showToast("បានបន្ថែមទំនិញថ្មីជោគជ័យ!");
+            }
+            resetProductForm();
+            renderAdminProductsTable();
+            updateAdminDashboardStats();
+            renderHome();
+        }
+
+        function deleteProduct(id) {
+            if(confirm("តើអ្នកពិតជាចង់លុបទំនិញនេះមែនទេ?")) {
+                products = products.filter(p => p.id !== id);
+                showToast("បានលុបទំនិញជោគជ័យ!");
+                renderAdminProductsTable();
+                updateAdminDashboardStats();
+                renderHome();
+            }
+        }
+
+        function resetProductForm() {
+            document.getElementById('editProdId').value = "";
+            document.getElementById('newProdName').value = "";
+            document.getElementById('newProdPrice').value = "";
+            document.getElementById('newProdDesc').value = "";
+            document.getElementById('newProdImages').value = "";
+            currentFormImages = [];
+            updateImagePreviewGrid([]);
+            document.getElementById('productFormHeaderTitle').innerText = "👕 Add New Product";
+            document.getElementById('productActionBtn').innerText = "Add Item";
+            document.getElementById('cancelEditBtn').style.display = "none";
+        }
+
+        function renderAdminProductsTable() {
+            const tbody = document.getElementById('adminProductsTable');
+            if(!products.length) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No products in catalog.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = products.map(p => {
+                let thumb = (p.images && p.images.length > 0) ? `<img src="${p.images[0]}" style="width:35px; height:35px; object-fit:cover; border-radius:4px;">` : 'No Pic';
+                return `
+                    <tr>
+                        <td>#${p.id}</td>
+                        <td>${thumb}</td>
+                        <td>${p.name}</td>
+                        <td>${p.category}</td>
+                        <td>$${p.price.toFixed(2)}</td>
+                        <td>
+                            <div style="display:flex; gap:4px;">
+                                <button style="background:var(--accent); color:white; border:none; padding:4px 8px; cursor:pointer; border-radius:4px; font-weight:600; font-size:11px;" onclick="editProduct(${p.id})">Edit</button>
+                                <button class="btn-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteProduct(${p.id})">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderAdminOrdersTable() {
+            const tb = document.getElementById('adminOrdersTable');
+            if (!ordersHistory.length) {
+                tb.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">មិនទាន់មានទិន្នន័យការបញ្ជាទិញនៅឡើយទេ។</td></tr>`;
+                return;
+            }
+
+            const searchQuery = (document.getElementById('adminOrderSearchInput')?.value || '').toLowerCase().trim();
+            const statusFilter = document.getElementById('adminOrderStatusFilter')?.value || 'All';
+
+            let filteredOrders = ordersHistory.filter(o => {
+                const matchesStatus = (statusFilter === 'All') || (o.status === statusFilter);
+                const matchesSearch = o.id.toString().toLowerCase().includes(searchQuery) ||
+                                      o.name.toLowerCase().includes(searchQuery) ||
+                                      o.phone.toLowerCase().includes(searchQuery) ||
+                                      o.status.toLowerCase().includes(searchQuery);
+                return matchesStatus && matchesSearch;
+            });
+
+            if (!filteredOrders.length) {
+                tb.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">មិនមានទិន្នន័យស្របតាមការស្វែងរកឡើយ។</td></tr>`;
+                return;
+            }
+
+            tb.innerHTML = filteredOrders.map((o) => {
+                const realIndex = ordersHistory.findIndex(orig => orig.id === o.id);
+
+                let badgeClass = "badge-unpaid";
+                if (o.status === "បានបង់ប្រាក់រួចរាល់" || o.status === "បានបញ្ចប់") badgeClass = "badge-paid";
+                if (o.status === "កំពុងដឹកជញ្ជូន" || o.status === "បានទៅដល់ទីតាំង") badgeClass = "badge-info";
+
+                return `
+                    <tr>
+                        <td>#${o.id}</td>
+                        <td>${o.name}</td>
+                        <td>${o.phone}</td>
+                        <td>${o.paymentMethod}</td>
+                        <td>$${o.total.toFixed(2)}</td>
+                        <td><span class="badge ${badgeClass}">${o.status}</span></td>
+                        <td>
+                            <select onchange="updateOrderStatus(${realIndex}, this.value)" style="padding: 4px 6px; font-size: 11px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-weight: 600;">
+                                <option value="មិនបង់ប្រាក់" ${o.status === 'មិនបង់ប្រាក់' ? 'selected' : ''}>1. មិនបង់ប្រាក់</option>
+                                <option value="បានបង់ប្រាក់រួចរាល់" ${o.status === 'បានបង់ប្រាក់រួចរាល់' ? 'selected' : ''}>2. បានបង់ប្រាក់រួចរាល់</option>
+                                <option value="កំពុងដឹកជញ្ជូន" ${o.status === 'កំពុងដឹកជញ្ជូន' ? 'selected' : ''}>3. កំពុងដឹកជញ្ជូន</option>
+                                <option value="បានទៅដល់ទីតាំង" ${o.status === 'បានទៅដល់ទីតាំង' ? 'selected' : ''}>4. បានទៅដល់ទីតាំង</option>
+                                <option value="បានបញ្ចប់" ${o.status === 'បានបញ្ចប់' ? 'selected' : ''}>5. បានបញ្ចប់</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateOrderStatus(index, newStatus) {
+            if(ordersHistory[index]) {
+                ordersHistory[index].status = newStatus;
+                showToast(`បានកែប្រែស្ថានភាព Order #${ordersHistory[index].id} ទៅជា "${newStatus}" ជោគជ័យ!`);
+                renderAdminOrdersTable();
+            }
+        }
+
+        renderHome();
+        renderCustomerPaymentDisplay();
+        renderCustomerServiceInfo();
+        updateTopNavAuth();
+    </script>
+</body>
+</html>
